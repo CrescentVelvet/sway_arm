@@ -1,0 +1,52 @@
+<?xml version = "1.0"?>
+<robot name="car_model" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:property name="arm_1_mass" value="1.0" />
+    <xacro:property name="arm_1_a" value="1.0" />
+    <xacro:property name="arm_1_b" value="1.0" />
+    <xacro:property name="arm_1_c" value="3.0" />
+
+    <!-- world_link -->
+    <link name="world_link">
+    </link>
+
+    <!-- arm -->
+    <link name="arm_1">
+        <collision>
+            <origin
+              xyz="0 0 0"
+              rpy="0 0 0" />
+            <geometry>
+                <box size="${arm_1_a} ${arm_1_b} ${arm_1_c}" />
+            </geometry>
+        </collision>
+        <visual>
+            <origin
+                xyz="0 0 0"
+                rpy="0 0 0" />
+            <geometry>
+                <box size="${arm_1_a} ${arm_1_b} ${arm_1_c}" />
+            </geometry>
+            <material name="DeepPink" >
+               <color rgba="1 0.0784 0.5764 1" />
+            </material>
+        </visual>
+        <inertial>
+            <origin
+              xyz="0 0 0"
+              rpy="0 0 0" />
+            <mass value="${arm_1_mass}" />
+            <inertia
+            ixx="${arm_1_mass / 12.0 * (arm_1_b*arm_1_b + arm_1_c*arm_1_c)}"
+            ixy="0.0"
+            ixz="0.0"
+            iyy="${arm_1_mass / 12.0 * (arm_1_a*arm_1_a + arm_1_c*arm_1_c)}"
+            iyz="0.0"
+            izz="${arm_1_mass / 12.0 * (arm_1_a*arm_1_a + arm_1_b*arm_1_b)}" />
+        </inertial>
+    </link>
+    <joint name="joint_world" type="fixed">
+        <parent link="world_link" />
+        <child link="arm_1" />
+    </joint>
+</robot>
