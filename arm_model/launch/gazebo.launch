@@ -1,8 +1,6 @@
- 
 <launch>
 
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
-        <arg name="world_name" value="$(find arm_model)/worlds/arm_world.world"/>
         <arg name="paused" value="false"/>
         <arg name="use_sim_time" value="true"/>
         <arg name="gui" value="true"/>
@@ -10,64 +8,45 @@
         <arg name="debug" value="false"/>
     </include>
 
-    <param name="robot_description"
+    <param
+        name="robot_description"
         command="$(find xacro)/xacro --inorder '$(find arm_model)/robots/arm_model.xacro'" />
 
-    <arg name="gui" default="true"/>
-    <param name="use_gui" value="$(arg gui)" />
-
-<!-- arm model -->
-    <node name="spawn_model"
+    <node
+        name="spawn_model"
         pkg="gazebo_ros"
         type="spawn_model"
         args="-urdf -model arm_model -param robot_description"
         respawn="false"
         output="screen" />
+<!--args="$(optenv ROBOT_INITIAL_POSE) -unpause -urdf -param robot_description -model arm_model -x 0 -y 0 -z 0.5 -R -1.57 -P 0 -Y 0"-->
 
-    <node name="tf_footprint_base"
+    <!-- <node
+        name="tf_footprint_base"
         pkg="tf"
         type="static_transform_publisher"
-        args="0 0 0 0 0 0 base_link base_footprint 40" />
+        args="0 0 0 0 0 0 base_link base_footprint 40" /> -->
 
-    <!-- <node name="fake_joint_calibration"
-        pkg="rostopic"
-        type="rostopic"
-        args="pub /calibrated std_msgs/Bool true" />
-    <node pkg="fake_localization" 
-        type="fake_localization" 
-        name="fake_localization" 
-        clear_params="true" output="screen">
-        <remap from="base_pose_ground_truth" to="odom" />
-        <param name="global_frame_id" value="map" />
-        <param name="base_frame_id" value="base_link" />
-    </node> -->
+    <!-- <rosparam 
+        file="$(find arm_model)/config/arm_control.yaml" 
+        command="load"/>
 
-<!-- column control
-    <rosparam file="$(find arm_model)/config/arm_control.yaml" command="load"/>
-    <node name="joint_controller_spawner" 
+    <node 
+        name="joint_controller_spawner" 
         pkg="controller_manager" 
         type="spawner" 
         respawn="false"
         output="screen" 
         ns="/arm_model" 
         args="joint_state_controller 
-              joint_column_link1_controller 
-              joint_column_link2_controller
-              joint_column_link3_controller"/> -->
+              joint_0_1_controller 
+              joint_1_2_controller
+              joint_2_3_controller" /> -->
 
-<!-- vel control
-    <node name="control_vel"
-        pkg="arm_keyboard"
-        type="arm_keyboard.py"
-        output="screen" /> -->
-
-<!-- arm state -->
     <node name="robot_state_publisher"
         pkg="robot_state_publisher"
-        type="robot_state_publisher"
+        type="robot_state_publisher" 
         respawn="false"
-        output="screen" >
-        <!--<remap from="/joint_states" to="/arm_model/joint_states" />-->
-    </node>
+        output="screen" />
 
 </launch>
